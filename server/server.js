@@ -54,7 +54,7 @@ app.post("/generate", (req, res) => {
         res.send("Module generated");
     });
 
-    var output = fs.createWriteStream('target.zip');
+    var output = fs.createWriteStream('generatedModule.zip');
     var archive = archiver('zip', {
       zlib: { level: 9 } // Sets the compression level.
     });
