@@ -2,7 +2,11 @@
 
 A module system gives you basic backend codes
 
-    run mongod command
-    run "npm install"
-    run "npm start"
+  Open a terminal and run 
+    mongod
+    
+  Go into your project directory and run 
+    npm install
+    
+  
 
