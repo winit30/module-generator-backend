@@ -3,9 +3,12 @@ const express = require("express"),
       path = require("path"),
       bodyParser = require("body-parser"),
       fs = require("fs"),
-      archiver = require('archiver');
+      archiver = require('archiver'),
+      {generateModule} = require('./../utils/generateModule'),
+      {user} = require('./../components/user/user');
 
-const packageJsonPath = "./modules/package.json";
+const packageJsonPath = "./modules/package.json",
+      userPath = "./modules/user/user.js";
 
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, '../public')));
@@ -20,55 +23,18 @@ app.listen(4000, () => {
 
 app.post("/generate", (req, res) => {
 
-    const application = {
-      name : "New Application",
-      version: "1.0.0",
-      description: "This is a new application",
-      author: "ModuleBuilder",
-      dependencies: {
-          "bcryptjs": "^2.4.3",
-          "body-parser": "^1.18.2",
-          "express": "^4.16.2",
-          "jsonwebtoken": "^8.1.0",
-          "mongoose": "^4.12.4",
-          "validator": "^9.0.0"
-      }
+    const json = req.body;
+
+    var userschema = fs.readFileSync("./components/user/schema.js", "utf8");
+    var schema = user(userschema);
+
+    try {
+      fs.writeFileSync(packageJsonPath, JSON.stringify(json, null, 2) , "utf8");
+      fs.writeFileSync(userPath, schema , "utf8");
+      generateModule();
+      res.send('module generated')
+    } catch(err) {
+      res.send(err);
     }
 
-    var json = {
-        "name": application.name,
-        "version": application.version,
-        "description": application.description,
-        "main": "server/server.js",
-        "scripts": {
-            "start": "node server/server.js"
-        },
-        "author": application.author,
-        "license": "ISC",
-        "dependencies": application.dependencies
-    };
-
-    fs.writeFile(packageJsonPath, JSON.stringify(json, null, 2) , function (err) {
-        if (err) throw err;
-        console.log('package.json file modified');
-        res.send("Module generated");
-    });
-
-    var output = fs.createWriteStream('generatedModule.zip');
-    var archive = archiver('zip', {
-      zlib: { level: 9 } // Sets the compression level.
-    });
-
-    output.on('close', function() {
-      console.log(archive.pointer() + ' total bytes');
-      console.log('archiver has been finalized and the output file descriptor has closed.');
-    });
-
-    archive.on('error', function(err){
-      throw err;
-    });
-
-    archive.pipe(output);
-    archive.directory('./modules', false);
-    archive.finalize();
 });

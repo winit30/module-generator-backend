@@ -4,7 +4,7 @@ const bodyParser = require('body-parser');
 const {mongoose} = require('./../db/db');
 const {User} = require('./../user/user');
 const _ = require('lodash');
-const {authenticate} = require('./middleware/authenticate');
+const {authenticate} = require('./../middleware/authenticate');
 
 app.use(bodyParser.json());
 
@@ -16,7 +16,8 @@ app.get('/', (req, res)=>{
 //Create user request
 app.post('/create', (req, res)=>{
 
-	var body = _.pick(req.body, ['userType', 'name', 'email', 'password'])
+	var body = req.body;
+
 	var user = new User(body);
 
 	user.save().then(()=>{

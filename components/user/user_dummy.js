@@ -37,8 +37,7 @@ var UserSchema = new mongoose.Schema({
 			required: true
 		}
 	}]
-}
- , {usePushEach: true});
+}, {usePushEach: true});
 
 UserSchema.methods.toJSON = function() {
 	var user = this;
@@ -108,8 +107,8 @@ UserSchema.methods.removeToken = function(token) {
 
 UserSchema.pre('save', function(next){
 	var user = this;
-	if (user.isModified('password')) {
-		bcrypt.genSalt(10, (err, salt) => {
+	if(user.isModified('password')){
+		bcrypt.genSalt(10, (err, salt)=>{
 			bcrypt.hash(user.password, salt, (err, hash)=>{
 				user.password = hash;
 				next();
@@ -122,4 +121,4 @@ UserSchema.pre('save', function(next){
 
 var User = mongoose.model('User', UserSchema);
 
-module.exports = {User};
+module.exports = { User };
