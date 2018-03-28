@@ -11,6 +11,8 @@ const express = require("express"),
 const packageJsonPath = "./modules/package.json",
       userPath = "./modules/user/user.js";
 
+const port = process.env.PORT || 4000;
+
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, '../public')));
 app.use(cors({origin: '*'}));
@@ -19,7 +21,7 @@ app.get("/", (req, res) => {
     res.send("This is a homepage")
 });
 
-app.listen(4000, () => {
+app.listen(port, () => {
     console.log("Server is listening on port 4000");
 });
 
