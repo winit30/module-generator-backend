@@ -6,10 +6,12 @@ const express = require("express"),
       archiver = require('archiver'),
       {generateModule} = require('./../utils/generateModule'),
       {user} = require('./../components/user/user'),
+      {authenticate} = require('./../components/user/authenticate'),
+      {userRoutes} = require('./../components/user/userRoutes'),
       cors = require('cors');
 
 const packageJsonPath = "./modules/package.json",
-      userPath = "./modules/user/user.js";
+      authMiddlewarePath = "./modules/middleware/authenticate.js";
 
 const port = process.env.PORT || 4000;
 
@@ -18,7 +20,7 @@ app.use(express.static(path.join(__dirname, '../public')));
 app.use(cors({origin: '*'}));
 
 app.get("/", (req, res) => {
-    res.send("This is a homepage")
+    res.send("This is a homepage");
 });
 
 app.listen(port, () => {
@@ -27,13 +29,23 @@ app.listen(port, () => {
 
 app.post("/generate", (req, res) => {
 
-    const json = req.body;
-    const userschema = fs.readFileSync("./components/user/schema.js", "utf8");
-    const schema = user(userschema);
+    const json = req.body.package;
+    var userschema =  JSON.stringify(req.body.apiSchema[0].schema, null, 2);
+        userschema = userschema.replace(/\"/g, "");
+
+    if(req.body.apiSchema[0].schemaType === "register") {
+        var schema = user(req.body.apiSchema[0].schemaName ,userschema);
+        var authMiddleware = authenticate(req.body.apiSchema[0].schemaName);
+        var routes = userRoutes(req.body.apiSchema[0].schemaName);
+        var userPath = `./modules/models/${req.body.apiSchema[0].schemaName.toLowerCase()}.js`;
+        var userRoutesPath = `./modules/routes/${req.body.apiSchema[0].schemaName.toLowerCase()}Routes.js`;
+    }
 
     try {
       fs.writeFileSync(packageJsonPath, JSON.stringify(json, null, 2) , "utf8");
       fs.writeFileSync(userPath, schema , "utf8");
+      fs.writeFileSync(authMiddlewarePath, authMiddleware , "utf8");
+      fs.writeFileSync(userRoutesPath, routes , "utf8");
       generateModule();
       res.send('module generated');
     } catch(err) {

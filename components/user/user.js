@@ -1,4 +1,4 @@
-const user = (userschema) => {
+const user = (schemaName, schema) => {
 
 return `const mongoose = require('mongoose');
 const validator = require('validator');
@@ -6,29 +6,29 @@ const jwt = require('jsonwebtoken');
 const _ = require('lodash');
 const bcrypt = require('bcryptjs');
 
-var UserSchema = new mongoose.Schema(${userschema} , {usePushEach: true});
+var ${schemaName}Schema = new mongoose.Schema(${schema} , {usePushEach: true});
 
-UserSchema.methods.toJSON = function() {
-	var user = this;
-	var userObject = user.toObject();
+${schemaName}Schema.methods.toJSON = function() {
+	var ${schemaName.toLowerCase()} = this;
+	var ${schemaName.toLowerCase()}Object = ${schemaName.toLowerCase()}.toObject();
 
-	return _.pick(userObject, ['_id', 'name', 'email']);
+	return _.pick(${schemaName.toLowerCase()}Object, ['_id', 'name', 'email']);
 };
 
-UserSchema.methods.generateAuthToken = function() {
-	var user = this;
+${schemaName}Schema.methods.generateAuthToken = function() {
+	var ${schemaName.toLowerCase()} = this;
 	var access = 'auth';
 
-	var token = jwt.sign({_id:user._id.toHexString(), access}, 'abc123').toString();
-	user.tokens.push({access, token});
+	var token = jwt.sign({_id:${schemaName.toLowerCase()}._id.toHexString(), access}, 'abc123').toString();
+	${schemaName.toLowerCase()}.tokens.push({access, token});
 
-	return user.save().then(()=>{
+	return ${schemaName.toLowerCase()}.save().then(()=>{
 		return token;
 	});
 };
 
-UserSchema.statics.findByToken = function(token) {
-	var User = this;
+${schemaName}Schema.statics.findByToken = function(token) {
+	var ${schemaName} = this;
 	var decoded;
 
 	try {
@@ -37,24 +37,24 @@ UserSchema.statics.findByToken = function(token) {
 		return Promise.reject();
 	}
 
-	return User.findOne({
+	return ${schemaName}.findOne({
 		'_id': decoded._id,
 		'tokens.token':token,
 		'tokens.access':'auth'
 	})
 };
 
-UserSchema.statics.findByCredentials = function(email, password) {
-	var User = this;
+${schemaName}Schema.statics.findByCredentials = function(email, password) {
+	var ${schemaName} = this;
 
-	return User.findOne({email}).then((user) => {
-		if(!user){
+	return ${schemaName}.findOne({email}).then((${schemaName.toLowerCase()}) => {
+		if(!${schemaName.toLowerCase()}){
 			return Promise.reject();
 		} else {
 			return new Promise((resolve, reject)=>{
-				bcrypt.compare(password, user.password, (err, res) => {
+				bcrypt.compare(password, ${schemaName.toLowerCase()}.password, (err, res) => {
 					if(res){
-						resolve(user);
+						resolve(${schemaName.toLowerCase()});
 					} else {
 						reject();
 					}
@@ -64,22 +64,22 @@ UserSchema.statics.findByCredentials = function(email, password) {
 	});
 };
 
-UserSchema.methods.removeToken = function(token) {
-	var user = this;
+${schemaName}Schema.methods.removeToken = function(token) {
+	var ${schemaName.toLowerCase()} = this;
 
-	return user.update({
+	return ${schemaName.toLowerCase()}.update({
 		$pull: {
 			tokens: {token}
 		}
 	});
 }
 
-UserSchema.pre('save', function(next){
-	var user = this;
-	if (user.isModified('password')) {
+${schemaName}Schema.pre('save', function(next){
+	var ${schemaName.toLowerCase()} = this;
+	if (${schemaName.toLowerCase()}.isModified('password')) {
 		bcrypt.genSalt(10, (err, salt) => {
-			bcrypt.hash(user.password, salt, (err, hash)=>{
-				user.password = hash;
+			bcrypt.hash(${schemaName.toLowerCase()}.password, salt, (err, hash)=>{
+				${schemaName.toLowerCase()}.password = hash;
 				next();
 			});
 		});
@@ -88,9 +88,9 @@ UserSchema.pre('save', function(next){
 	}
 });
 
-var User = mongoose.model('User', UserSchema);
+var ${schemaName} = mongoose.model('${schemaName}', ${schemaName}Schema);
 
-module.exports = {User};`;
+module.exports = {${schemaName}};`;
 
 }
 
