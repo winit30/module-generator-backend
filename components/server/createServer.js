@@ -1,8 +1,9 @@
-const express = require('express');
+var createServer = (route) => {
+  return `const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
 const {mongoose} = require('./../db/db');
-const routes = require('./../routes/userRoutes');
+const routes = require('./../routes/${route}');
 
 app.use(bodyParser.json());
 
@@ -11,4 +12,7 @@ app.use('/app/',routes);
 //Server code
 app.listen(2000, ()=> {
 	console.log('server is running on port 2000');
-});
+});`;
+};
+
+module.exports = {createServer};
