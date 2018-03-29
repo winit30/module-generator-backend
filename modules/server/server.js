@@ -2,8 +2,11 @@ const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
 const {mongoose} = require('./../db/db');
-const userRoute = require('./../routes/userRoutes');
-const eventRoute = require('./../routes/eventRoutes');
+const userRoutes = require('./../routes/userRoutes');
+const eventRoutes = require('./../routes/eventRoutes');
+
+app.use('/user', userRoutes);
+app.use('/event', eventRoutes);
 
 const port = process.env.PORT || 2000;
 //Server code

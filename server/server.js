@@ -12,6 +12,7 @@ const express = require("express"),
       {authenticate} = require('./../components/user/authenticate'),
       {userRoutes} = require('./../components/user/userRoutes'),
       {createServer} = require('./../components/server/createServer'),
+      {createAppUse} = require('./../components/server/appUse'),
       {dbs} = require('./../components/db/db'),
       cors = require('cors');
 
@@ -43,6 +44,8 @@ app.post("/generate", (req, res) => {
     const json = req.body.package;
     const db = dbs(req.body.dbName);
 
+    var appUse = '';
+
     for(let i = 0; i<req.body.apiSchema.length; i++) {
       var schemaObject =  JSON.stringify(req.body.apiSchema[i].schema, null, 2);
           schemaObject = schemaObject.replace(/\"/g, "");
@@ -52,7 +55,8 @@ app.post("/generate", (req, res) => {
           var routes = userRoutes(req.body.apiSchema[i].schemaName);
           var userPath = `./modules/models/${req.body.apiSchema[i].schemaName.toLowerCase()}.js`;
           var userRoutesPath = `./modules/routes/${req.body.apiSchema[i].schemaName.toLowerCase()}Routes.js`;
-          modules[`${req.body.apiSchema[i].schemaName.toLowerCase()}Route`] = `require('./../routes/${req.body.apiSchema[i].schemaName.toLowerCase()}Routes')`;
+          modules[`${req.body.apiSchema[i].schemaName.toLowerCase()}Routes`] = `require('./../routes/${req.body.apiSchema[i].schemaName.toLowerCase()}Routes')`;
+          appUse = createAppUse(`'/${req.body.apiSchema[i].schemaName.toLowerCase()}', ${req.body.apiSchema[i].schemaName.toLowerCase()}Routes`);
           try {
             fs.writeFileSync(userPath, schema , "utf8");
             fs.writeFileSync(authMiddlewarePath, authMiddleware , "utf8");
@@ -65,7 +69,8 @@ app.post("/generate", (req, res) => {
         var routes = userRoutes(req.body.apiSchema[i].schemaName);
         var userPath = `./modules/models/${req.body.apiSchema[i].schemaName.toLowerCase()}.js`;
         var userRoutesPath = `./modules/routes/${req.body.apiSchema[i].schemaName.toLowerCase()}Routes.js`;
-        modules[`${req.body.apiSchema[i].schemaName.toLowerCase()}Route`] = `require('./../routes/${req.body.apiSchema[i].schemaName.toLowerCase()}Routes')`;
+        modules[`${req.body.apiSchema[i].schemaName.toLowerCase()}Routes`] = `require('./../routes/${req.body.apiSchema[i].schemaName.toLowerCase()}Routes')`;
+        appUse = createAppUse(`'/${req.body.apiSchema[i].schemaName.toLowerCase()}', ${req.body.apiSchema[i].schemaName.toLowerCase()}Routes`);
         try {
           fs.writeFileSync(userPath, schema , "utf8");
           fs.writeFileSync(userRoutesPath, routes , "utf8");
@@ -76,7 +81,7 @@ app.post("/generate", (req, res) => {
     }
 
     var serverListening = fs.readFileSync("./components/server/appListen.js", "utf8");
-    var server = createServer(modules, serverListening);
+    var server = createServer(modules, serverListening, appUse);
 
     try {
       fs.writeFileSync(packageJsonPath, JSON.stringify(json, null, 2) , "utf8");

@@ -1,4 +1,4 @@
-var createServer = (modules, appListening) => {
+var createServer = (modules, appListening, appUse) => {
     var constModules = '';
 
     for(key in modules) {
@@ -7,6 +7,7 @@ var createServer = (modules, appListening) => {
     }
 
 return `${constModules}
+${appUse}
 ${appListening}
 `;
 };
