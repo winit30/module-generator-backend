@@ -2,13 +2,12 @@ const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
 const {mongoose} = require('./../db/db');
-const routes = require('./../routes/userRoutes');
+const userRoute = require('./../routes/userRoutes');
+const eventRoute = require('./../routes/eventRoutes');
 
-app.use(bodyParser.json());
-
-app.use('/app/',routes);
-
+const port = process.env.PORT || 2000;
 //Server code
-app.listen(2000, ()=> {
-	console.log('server is running on port 2000');
+app.listen(port, ()=> {
+	console.log(`server is running on port ${port}`);
 });
+

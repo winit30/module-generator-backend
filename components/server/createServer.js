@@ -1,18 +1,14 @@
-var createServer = (route) => {
-  return `const express = require('express');
-const app = express();
-const bodyParser = require('body-parser');
-const {mongoose} = require('./../db/db');
-const routes = require('./../routes/${route}');
+var createServer = (modules, appListening) => {
+    var constModules = '';
 
-app.use(bodyParser.json());
+    for(key in modules) {
+      let module = `const ${key} = ${modules[key]};\n`;
+      constModules += module;
+    }
 
-app.use('/app/',routes);
-
-//Server code
-app.listen(2000, ()=> {
-	console.log('server is running on port 2000');
-});`;
+return `${constModules}
+${appListening}
+`;
 };
 
 module.exports = {createServer};
