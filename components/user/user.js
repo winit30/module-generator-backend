@@ -1,12 +1,18 @@
+const {modules} = require('./modules');
+const {generateSchema} = require('./schema');
+
 const user = (schemaName, schema) => {
 
-return `const mongoose = require('mongoose');
-const validator = require('validator');
-const jwt = require('jsonwebtoken');
-const _ = require('lodash');
-const bcrypt = require('bcryptjs');
+	var renderModules = '';
+	for(key in modules) {
+		let module = `const ${key} = ${modules[key]};\n`;
+		renderModules += module;
+	}
 
-var ${schemaName}Schema = new mongoose.Schema(${schema} , {usePushEach: true});
+	const renderSchema = generateSchema(schemaName, schema);
+
+return `${renderModules}
+${renderSchema}
 
 ${schemaName}Schema.methods.toJSON = function() {
 	var ${schemaName.toLowerCase()} = this;
