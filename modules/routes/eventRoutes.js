@@ -3,10 +3,6 @@ const {Event} = require('./../models/event');
 const _ = require('lodash');
 const {authenticate} = require('./../middleware/authenticate');
 
-Router.get('/', (req, res)=>{
-	res.send('I am the main page');
-});
-
 //Signup request
 Router.post('/create', (req, res)=>{
 

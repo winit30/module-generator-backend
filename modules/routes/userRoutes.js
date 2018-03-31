@@ -3,10 +3,6 @@ const {User} = require('./../models/user');
 const _ = require('lodash');
 const {authenticate} = require('./../middleware/authenticate');
 
-Router.get('/', (req, res)=>{
-	res.send('I am the main page');
-});
-
 //Signup request
 Router.post('/create', (req, res)=>{
 
