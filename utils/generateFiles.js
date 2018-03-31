@@ -2,6 +2,7 @@ const {user} = require('./../components/user/user'),
       {api} = require('./../components/api/api'),
       {authenticate} = require('./../components/user/authenticate'),
       {userRoutes} = require('./../components/user/userRoutes'),
+      {apiRoutes} = require('./../components/api/apiRoutes'),
       {createServer} = require('./../components/server/createServer'),
       {createAppUse} = require('./../components/server/appUse'),
       {dbs} = require('./../components/db/db'),
@@ -9,7 +10,7 @@ const {user} = require('./../components/user/user'),
       {generateDir} = require('./generateDir'),
       {writeFiles} = require('./writeFiles'),
       fs = require("fs");
-      
+
 var {modules} = require('./../components/server/modules');
 
 const PACKAGE_JSON_PATH = "./modules/package.json",
@@ -42,7 +43,7 @@ var generateFiles = (resBody, cb) => {
         //create auth middleware
         const authMiddleware = authenticate(apiSchema[i].schemaName);
         //create auth routes
-        const routes = userRoutes(apiSchema[i].schemaName);
+        const routes = userRoutes(apiSchema[i].schemaName, apiSchema[i].schemaType);
         //user file path
         const REGISTER_MODEL_PATH = `./modules/models/${apiSchema[i].schemaName.toLowerCase()}.js`;
         //userRoutes file path
@@ -61,7 +62,7 @@ var generateFiles = (resBody, cb) => {
           //create api schema
           var schema = api(apiSchema[i].schemaName ,schemaObject);
           //create api routes
-          var routes = userRoutes(apiSchema[i].schemaName);
+          var routes = apiRoutes(apiSchema[i].schemaName, apiSchema[i].schemaType);
           //create api path
           var API_PATH = `./modules/models/${apiSchema[i].schemaName.toLowerCase()}.js`;
           //create api route path

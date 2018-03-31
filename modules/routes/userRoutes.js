@@ -4,19 +4,16 @@ const _ = require('lodash');
 const {authenticate} = require('./../middleware/authenticate');
 
 //Signup request
-Router.post('/create', (req, res)=>{
-
+Router.post('/create', (req, res) => {
 	var body = req.body;
-
 	var user = new User(body);
-
 	user.save().then(()=>{
 		return user.generateAuthToken();
 	}).then((token)=>{
 		res.header('x-auth', token).send(user);
 	}).catch((e)=>{
 		res.send(e);
-	})
+	});
 });
 
 //Get user request
@@ -26,9 +23,7 @@ Router.get('/user', authenticate , (req, res) => {
 
 //Login request
 Router.post('/login', (req, res) => {
-
 	var body = _.pick(req.body, ['email', 'password']);
-
 	User.findByCredentials(body.email, body.password).then((user) => {
 		return user.generateAuthToken().then((token)=>{
 			res.header('x-auth', token).send(user);
