@@ -20,21 +20,16 @@ var EventSchema = new mongoose.Schema({
     trim: true,
     required: true,
     minlength: 10
-  },
-  email: {
-    type: String,
-    unique: true,
-    required: true,
-    minlength: 6,
-    trim: true,
-    validate: {
-      validator: validator.isEmail,
-      message: '{VALUE} is not a valid email'
-    }
   }
 } , {usePushEach: true});
 
-EventSchema.statics.findEventsByUserId = function(userID) {
+EventSchema.methods.toJSON = function() {
+	var event = this;
+	var eventObject = event.toObject();
+	return _.pick(eventObject, ['name', 'email']);
+};
+
+EventSchema.statics.findEventByUserId = function(userID) {
   var Event = this;
   return Event.find({userID})
 }

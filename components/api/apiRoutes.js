@@ -1,4 +1,5 @@
 const {create} = require('./../routeFunctions/create');
+const {read} = require('./../routeFunctions/read');
 
 var apiRoutes = (schemaName, schemaType) => {
 
@@ -8,6 +9,8 @@ const _ = require('lodash');
 const {authenticate} = require('./../middleware/authenticate');
 
 ${create(schemaName, schemaType)}
+
+${read(schemaName)}
 
 module.exports = Router;`;
 

@@ -56,8 +56,7 @@ var UserSchema = new mongoose.Schema({
 UserSchema.methods.toJSON = function() {
 	var user = this;
 	var userObject = user.toObject();
-
-	return _.omit(userObject, ['password', 'token']);
+	return _.pick(userObject, ['name', 'email']);
 };
 
 UserSchema.methods.generateAuthToken = function() {

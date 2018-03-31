@@ -13,4 +13,9 @@ Router.post('/create', authenticate, (req, res) => {
 	});
 });
 
+//Get user request
+Router.get('/event', authenticate , (req, res) => {
+	res.send(req.event)
+});
+
 module.exports = Router;

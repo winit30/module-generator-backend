@@ -1,5 +1,5 @@
 const {modules} = require('./modules');
-const {generateSchema} = require('./schema');
+const {generateSchema} = require('./../apiFunctions/schema');
 const {toJson} = require('./../apiFunctions/toJson');
 const {generateAuthToken} = require('./../apiFunctions/generateAuthToken');
 const {findByToken} = require('./../apiFunctions/findByToken');
@@ -15,10 +15,8 @@ const user = (schemaName, schema) => {
 		renderModules += module;
 	}
 
-	const renderSchema = generateSchema(schemaName, schema);
-
 return `${renderModules}
-${renderSchema}
+${generateSchema(schemaName, schema)}
 
 ${toJson(schemaName)}
 
