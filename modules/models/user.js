@@ -57,19 +57,19 @@ UserSchema.methods.toJSON = function() {
 	var user = this;
 	var userObject = user.toObject();
 
-	return _.pick(userObject, ['_id', 'name', 'email']);
+	return _.omit(userObject, ['password', 'token']);
 };
 
 UserSchema.methods.generateAuthToken = function() {
-	var user = this;
-	var access = 'auth';
+  var user = this;
+  var access = 'auth';
 
-	var token = jwt.sign({_id:user._id.toHexString(), access}, 'abc123').toString();
-	user.tokens.push({access, token});
+  var token = jwt.sign({_id:user._id.toHexString(), access}, 'abc123').toString();
+  user.tokens.push({access, token});
 
-	return user.save().then(()=>{
-		return token;
-	});
+  return user.save().then(()=>{
+    return token;
+  });
 };
 
 UserSchema.statics.findByToken = function(token) {
@@ -90,23 +90,23 @@ UserSchema.statics.findByToken = function(token) {
 };
 
 UserSchema.statics.findByCredentials = function(email, password) {
-	var User = this;
+  var User = this;
 
-	return User.findOne({email}).then((user) => {
-		if(!user){
-			return Promise.reject();
-		} else {
-			return new Promise((resolve, reject)=>{
-				bcrypt.compare(password, user.password, (err, res) => {
-					if(res){
-						resolve(user);
-					} else {
-						reject();
-					}
-				});
-			});
-		}
-	});
+  return User.findOne({email}).then((user) => {
+    if(!user){
+      return Promise.reject();
+    } else {
+      return new Promise((resolve, reject)=>{
+        bcrypt.compare(password, user.password, (err, res) => {
+          if(res){
+            resolve(user);
+          } else {
+            reject();
+          }
+        });
+      });
+    }
+  });
 };
 
 UserSchema.methods.removeToken = function(token) {
@@ -120,17 +120,17 @@ UserSchema.methods.removeToken = function(token) {
 }
 
 UserSchema.pre('save', function(next){
-	var user = this;
-	if (user.isModified('password')) {
-		bcrypt.genSalt(10, (err, salt) => {
-			bcrypt.hash(user.password, salt, (err, hash)=>{
-				user.password = hash;
-				next();
-			});
-		});
-	} else {
-		next();
-	}
+  var user = this;
+  if (user.isModified('password')) {
+    bcrypt.genSalt(10, (err, salt) => {
+      bcrypt.hash(user.password, salt, (err, hash)=>{
+        user.password = hash;
+        next();
+      });
+    });
+  } else {
+    next();
+  }
 });
 
 var User = mongoose.model('User', UserSchema);

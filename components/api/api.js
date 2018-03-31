@@ -1,4 +1,5 @@
-var api = (schemaName, schema) => {
+var api = (schemaName, schema, ) => {
+  
 return `const mongoose = require('mongoose');
 const validator = require('validator');
 const _ = require('lodash');

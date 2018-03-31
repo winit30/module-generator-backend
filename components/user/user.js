@@ -1,5 +1,11 @@
 const {modules} = require('./modules');
 const {generateSchema} = require('./schema');
+const {toJson} = require('./../apiFunctions/toJson');
+const {generateAuthToken} = require('./../apiFunctions/generateAuthToken');
+const {findByToken} = require('./../apiFunctions/findByToken');
+const {findByCredentials} = require('./../apiFunctions/findByCredentials');
+const {removeToken} = require('./../apiFunctions/removeToken');
+const {preEvent} = require('./../apiFunctions/preEvent');
 
 const user = (schemaName, schema) => {
 
@@ -14,85 +20,17 @@ const user = (schemaName, schema) => {
 return `${renderModules}
 ${renderSchema}
 
-${schemaName}Schema.methods.toJSON = function() {
-	var ${schemaName.toLowerCase()} = this;
-	var ${schemaName.toLowerCase()}Object = ${schemaName.toLowerCase()}.toObject();
+${toJson(schemaName)}
 
-	return _.pick(${schemaName.toLowerCase()}Object, ['_id', 'name', 'email']);
-};
+${generateAuthToken(schemaName)}
 
-${schemaName}Schema.methods.generateAuthToken = function() {
-	var ${schemaName.toLowerCase()} = this;
-	var access = 'auth';
+${findByToken(schemaName)}
 
-	var token = jwt.sign({_id:${schemaName.toLowerCase()}._id.toHexString(), access}, 'abc123').toString();
-	${schemaName.toLowerCase()}.tokens.push({access, token});
+${findByCredentials(schemaName)}
 
-	return ${schemaName.toLowerCase()}.save().then(()=>{
-		return token;
-	});
-};
+${removeToken(schemaName)}
 
-${schemaName}Schema.statics.findByToken = function(token) {
-	var ${schemaName} = this;
-	var decoded;
-
-	try {
-		decoded = jwt.verify(token, 'abc123');
-	} catch(e) {
-		return Promise.reject();
-	}
-
-	return ${schemaName}.findOne({
-		'_id': decoded._id,
-		'tokens.token':token,
-		'tokens.access':'auth'
-	})
-};
-
-${schemaName}Schema.statics.findByCredentials = function(email, password) {
-	var ${schemaName} = this;
-
-	return ${schemaName}.findOne({email}).then((${schemaName.toLowerCase()}) => {
-		if(!${schemaName.toLowerCase()}){
-			return Promise.reject();
-		} else {
-			return new Promise((resolve, reject)=>{
-				bcrypt.compare(password, ${schemaName.toLowerCase()}.password, (err, res) => {
-					if(res){
-						resolve(${schemaName.toLowerCase()});
-					} else {
-						reject();
-					}
-				});
-			});
-		}
-	});
-};
-
-${schemaName}Schema.methods.removeToken = function(token) {
-	var ${schemaName.toLowerCase()} = this;
-
-	return ${schemaName.toLowerCase()}.update({
-		$pull: {
-			tokens: {token}
-		}
-	});
-}
-
-${schemaName}Schema.pre('save', function(next){
-	var ${schemaName.toLowerCase()} = this;
-	if (${schemaName.toLowerCase()}.isModified('password')) {
-		bcrypt.genSalt(10, (err, salt) => {
-			bcrypt.hash(${schemaName.toLowerCase()}.password, salt, (err, hash)=>{
-				${schemaName.toLowerCase()}.password = hash;
-				next();
-			});
-		});
-	} else {
-		next();
-	}
-});
+${preEvent(schemaName)}
 
 var ${schemaName} = mongoose.model('${schemaName}', ${schemaName}Schema);
 
