@@ -1,8 +1,12 @@
 var update = (schemaName) => {
 
-return `//Get user request
-Router.get('/${schemaName.toLowerCase()}', authenticate , (req, res) => {
-	res.send(req.${schemaName.toLowerCase()})
+return `//api update by id request
+Router.put('/update/:_id', authenticate, (req, res) => {
+	${schemaName}.findAndUpdate(req.params._id, req.body).then((${schemaName.toLowerCase()})=>{
+		res.send(${schemaName.toLowerCase()});
+	}).catch((err) => {
+		res.send(err);
+	});
 });`;
 
 }

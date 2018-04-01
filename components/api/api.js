@@ -1,5 +1,8 @@
 const {generateSchema} = require('./../apiFunctions/schema');
 const {toJson} = require('./../apiFunctions/toJson');
+const {findByUserId} = require('./../apiFunctions/findByUserId');
+const {findAndUpdate} = require('./../apiFunctions/findAndUpdate');
+const {findAndDelete} = require('./../apiFunctions/findAndDelete');
 const {modules} = require('./modules');
 
 var api = (schemaName, schema, schemaType) => {
@@ -15,10 +18,11 @@ ${generateSchema(schemaName, schema, schemaType)}
 
 ${toJson(schemaName)}
 
-${schemaName}Schema.statics.find${schemaName}sByUserId = function(userID) {
-  var ${schemaName} = this;
-  return ${schemaName}.find({userID})
-}
+${findByUserId(schemaName)}
+
+${findAndUpdate(schemaName)}
+
+${findAndDelete(schemaName)}
 
 var ${schemaName} = mongoose.model('${schemaName}', ${schemaName}Schema);
 

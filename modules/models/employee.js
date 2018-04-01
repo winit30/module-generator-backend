@@ -35,9 +35,22 @@ EmployeeSchema.methods.toJSON = function() {
 	return _.pick(employeeObject, ['name', 'email']);
 };
 
+//Find by userID
 EmployeeSchema.statics.findEmployeesByUserId = function(userID) {
   var Employee = this;
   return Employee.find({userID})
+}
+
+//Find by id and update
+EmployeeSchema.statics.findAndUpdate = function(id, body) {
+  var Employee = this;
+  return Employee.findByIdAndUpdate(id, {$set:body}, {new: true});
+}
+
+// Find by id and delete
+EmployeeSchema.statics.findAndDelete = function(_id) {
+  var Employee = this;
+  return Employee.remove({_id});
 }
 
 var Employee = mongoose.model('Employee', EmployeeSchema);
