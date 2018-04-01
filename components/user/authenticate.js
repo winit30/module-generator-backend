@@ -8,7 +8,7 @@ var authenticate = (req, res, next) => {
 		if(!${schemaName.toLowerCase()}){
 			return Promise.reject();
 		} else {
-			req.${schemaName.toLowerCase()} = ${schemaName.toLowerCase()};
+			req.user = ${schemaName.toLowerCase()};
 			req.token = token;
 			next();
 		}

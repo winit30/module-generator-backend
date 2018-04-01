@@ -12,7 +12,7 @@ const {authenticate} = require('./../middleware/authenticate');
 
 ${create(schemaName, schemaType)}
 
-${read(schemaName)}
+${read(schemaName, schemaType)}
 
 ${login(schemaName)}
 

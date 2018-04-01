@@ -1,13 +1,13 @@
-const {User} = require('./../models/user');
+const {Auth} = require('./../models/auth');
 
 var authenticate = (req, res, next) => {
 	var token = req.header('x-auth');
 
-	User.findByToken(token).then((user)=>{
-		if(!user){
+	Auth.findByToken(token).then((auth)=>{
+		if(!auth){
 			return Promise.reject();
 		} else {
-			req.user = user;
+			req.user = auth;
 			req.token = token;
 			next();
 		}

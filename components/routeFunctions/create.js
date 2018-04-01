@@ -19,6 +19,7 @@ Router.post('/create', (req, res) => {
 
 return `Router.post('/create', authenticate, (req, res) => {
 	var body = req.body;
+			body.userID = req.user._id;
 	var ${schemaName.toLowerCase()} = new ${schemaName}(body);
 	${schemaName.toLowerCase()}.save().then((${schemaName.toLowerCase()})=>{
 		 res.send(${schemaName.toLowerCase()});
@@ -28,7 +29,6 @@ return `Router.post('/create', authenticate, (req, res) => {
 });`;
 
 }
-
 
 }
 

@@ -2,7 +2,7 @@ const {generateSchema} = require('./../apiFunctions/schema');
 const {toJson} = require('./../apiFunctions/toJson');
 const {modules} = require('./modules');
 
-var api = (schemaName, schema) => {
+var api = (schemaName, schema, schemaType) => {
 
   var renderModules = '';
 	for(key in modules) {
@@ -11,11 +11,11 @@ var api = (schemaName, schema) => {
 	}
 
 return `${renderModules}
-${generateSchema(schemaName, schema)}
+${generateSchema(schemaName, schema, schemaType)}
 
 ${toJson(schemaName)}
 
-${schemaName}Schema.statics.find${schemaName}ByUserId = function(userID) {
+${schemaName}Schema.statics.find${schemaName}sByUserId = function(userID) {
   var ${schemaName} = this;
   return ${schemaName}.find({userID})
 }

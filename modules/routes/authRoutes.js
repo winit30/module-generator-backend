@@ -1,32 +1,32 @@
 const Router = require('express').Router();
-const {User} = require('./../models/user');
+const {Auth} = require('./../models/auth');
 const _ = require('lodash');
 const {authenticate} = require('./../middleware/authenticate');
 
 //Signup request
 Router.post('/create', (req, res) => {
 	var body = req.body;
-	var user = new User(body);
-	user.save().then(()=>{
-		return user.generateAuthToken();
+	var auth = new Auth(body);
+	auth.save().then(()=>{
+		return auth.generateAuthToken();
 	}).then((token)=>{
-		res.header('x-auth', token).send(user);
+		res.header('x-auth', token).send(auth);
 	}).catch((e)=>{
 		res.send(e);
 	});
 });
 
 //Get user request
-Router.get('/user', authenticate , (req, res) => {
-	res.send(req.user)
+Router.get('/auth', authenticate , (req, res) => {
+	res.send(req.user);
 });
 
 //Login request
 Router.post('/login', (req, res) => {
 	var body = _.pick(req.body, ['email', 'password']);
-	User.findByCredentials(body.email, body.password).then((user) => {
-		return user.generateAuthToken().then((token)=>{
-			res.header('x-auth', token).send(user);
+	Auth.findByCredentials(body.email, body.password).then((auth) => {
+		return auth.generateAuthToken().then((token)=>{
+			res.header('x-auth', token).send(auth);
 		});
 	}).catch((e) => {
 		res.status(400).send(e);
@@ -35,7 +35,7 @@ Router.post('/login', (req, res) => {
 
 //logout request
 Router.delete('/logout', authenticate, (req, res)=>{
-	req.user.removeToken(req.token).then(()=>{
+	req.auth.removeToken(req.token).then(()=>{
 		res.status(200).send();
 	}, ()=> {
 		res.status(400).send();

@@ -1,6 +1,9 @@
-var appUseString = '';
+var appUseString = "app.use(bodyParser.json());\n";
+
 var createAppUse = (params) => {
-  appUseString += `app.use(${params});\n`;
+  if(params !== undefined){
+        appUseString += `app.use(${params});\n`;
+  }
   return appUseString;
 }
 

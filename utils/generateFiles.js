@@ -31,15 +31,14 @@ var generateFiles = (resBody, cb) => {
     for(let i = 0; i<apiSchema.length; i++) {
       //create schema object
       schemaObject =  JSON.stringify(apiSchema[i].schema, null, 2);
-      schemaObject = schemaObject.replace(/\"/g, "");
       //add route modules
       modules[`${apiSchema[i].schemaName.toLowerCase()}Routes`] = `require('./../routes/${apiSchema[i].schemaName.toLowerCase()}Routes')`;
       //add app.use
-      appUse = createAppUse(`'/${apiSchema[i].schemaName.toLowerCase()}', ${apiSchema[i].schemaName.toLowerCase()}Routes`);
+      createAppUse(`'/${apiSchema[i].schemaName.toLowerCase()}', ${apiSchema[i].schemaName.toLowerCase()}Routes`);
       //if register schema
       if (apiSchema[i].schemaType === "register") {
         //create userSchema
-        const userSchema = user(apiSchema[i].schemaName ,schemaObject);
+        const userSchema = user(apiSchema[i].schemaName ,schemaObject, apiSchema[i].schemaType);
         //create auth middleware
         const authMiddleware = authenticate(apiSchema[i].schemaName);
         //create auth routes
@@ -60,7 +59,7 @@ var generateFiles = (resBody, cb) => {
         }
       } else {
           //create api schema
-          var schema = api(apiSchema[i].schemaName ,schemaObject);
+          var schema = api(apiSchema[i].schemaName ,schemaObject, apiSchema[i].schemaType);
           //create api routes
           var routes = apiRoutes(apiSchema[i].schemaName, apiSchema[i].schemaType);
           //create api path
@@ -79,7 +78,7 @@ var generateFiles = (resBody, cb) => {
     }
 
     var serverListening = fs.readFileSync("./components/server/appListen.js", "utf8");
-    var server = createServer(modules, serverListening, appUse);
+    var server = createServer(serverListening);
 
     try {
       //write package.json file

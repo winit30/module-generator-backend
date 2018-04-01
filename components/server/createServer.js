@@ -1,4 +1,7 @@
-var createServer = (modules, appListening, appUse) => {
+const {createAppUse} = require('./appUse');
+const {modules} = require('./modules');
+
+var createServer = (appListening) => {
     var renderModules = '';
     for(key in modules) {
       let module = `const ${key} = ${modules[key]};\n`;
@@ -6,7 +9,7 @@ var createServer = (modules, appListening, appUse) => {
     }
 
 return `${renderModules}
-${appUse}
+${createAppUse()}
 ${appListening}
 `;
 };
