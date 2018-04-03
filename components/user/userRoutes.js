@@ -3,7 +3,10 @@ const {read} = require('./../routeFunctions/read');
 const {login} = require('./../routeFunctions/login');
 const {logout} = require('./../routeFunctions/logout');
 
-var userRoutes = (schemaName, schemaType) => {
+var userRoutes = (apiSchema) => {
+
+  const schemaName = apiSchema.schemaName,
+        schemaType = apiSchema.schemaType;
 
 return `const Router = require('express').Router();
 const {${schemaName}} = require('./../models/${schemaName.toLowerCase()}');

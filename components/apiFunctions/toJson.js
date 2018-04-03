@@ -1,6 +1,6 @@
-var toJson = (schemaName) => {
+var toJson = (schemaName, returnValue) => {
 
-var pick = "['name', 'email']";
+var pick = `${returnValue}`;
 
 return `${schemaName}Schema.methods.toJSON = function() {
 	var ${schemaName.toLowerCase()} = this;

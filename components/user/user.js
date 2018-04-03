@@ -7,7 +7,12 @@ const {findByCredentials} = require('./../apiFunctions/findByCredentials');
 const {removeToken} = require('./../apiFunctions/removeToken');
 const {preEvent} = require('./../apiFunctions/preEvent');
 
-const user = (schemaName, schema, schemaType) => {
+const user = (apiSchema) => {
+
+	const schemaName = apiSchema.schemaName,
+			  schema = JSON.stringify(apiSchema.schema, null, 2),
+				schemaType = apiSchema.schemaType,
+				returnValue = apiSchema.returnValue;
 
 	var renderModules = '';
 	for(key in modules) {
@@ -18,7 +23,7 @@ const user = (schemaName, schema, schemaType) => {
 return `${renderModules}
 ${generateSchema(schemaName, schema, schemaType)}
 
-${toJson(schemaName)}
+${toJson(schemaName, returnValue)}
 
 ${generateAuthToken(schemaName)}
 

@@ -21,35 +21,35 @@ const PACKAGE_JSON_PATH = "./modules/package.json",
 var generateFiles = (resBody, cb) => {
     //create module directory
     generateDir();
-    //initialize schemaObject variable
-    var schemaObject = "";
-    var appUse = "";
-    const json = resBody.package;
-    const db = dbs(resBody.dbName);
-    const apiSchema = resBody.apiSchema;
+    //get package json
+    const json = resBody.package,
+          //create database file
+          db = dbs(resBody.dbName),
+          //get listening codes
+          serverListening = fs.readFileSync("./components/server/appListen.js", "utf8"),
+          //get api schema object
+          apiSchema = resBody.apiSchema;
     //loop through apiSchema
     for(let i = 0; i<apiSchema.length; i++) {
-      //create schema object
-      schemaObject =  JSON.stringify(apiSchema[i].schema, null, 2);
       //add route modules
       modules[`${apiSchema[i].schemaName.toLowerCase()}Routes`] = `require('./../routes/${apiSchema[i].schemaName.toLowerCase()}Routes')`;
       //add app.use
       createAppUse(`'/${apiSchema[i].schemaName.toLowerCase()}', ${apiSchema[i].schemaName.toLowerCase()}Routes`);
       //if register schema
       if (apiSchema[i].schemaType === "register") {
-        //create userSchema
-        const userSchema = user(apiSchema[i].schemaName ,schemaObject, apiSchema[i].schemaType);
-        //create auth middleware
-        const authMiddleware = authenticate(apiSchema[i].schemaName);
-        //create auth routes
-        const routes = userRoutes(apiSchema[i].schemaName, apiSchema[i].schemaType);
-        //user file path
-        const REGISTER_MODEL_PATH = `./modules/models/${apiSchema[i].schemaName.toLowerCase()}.js`;
-        //userRoutes file path
-        const REGISTER_ROUTE_PATH = `./modules/routes/${apiSchema[i].schemaName.toLowerCase()}Routes.js`;
+        //create user model
+        const userModel = user(apiSchema[i]),
+              //create auth middleware
+              authMiddleware = authenticate(apiSchema[i].schemaName),
+              //create auth routes
+              routes = userRoutes(apiSchema[i]),
+              //user file path
+              REGISTER_MODEL_PATH = `./modules/models/${apiSchema[i].schemaName.toLowerCase()}.js`,
+              //userRoutes file path
+              REGISTER_ROUTE_PATH = `./modules/routes/${apiSchema[i].schemaName.toLowerCase()}Routes.js`;
         try {
           //write user file
-          writeFiles(REGISTER_MODEL_PATH, userSchema);
+          writeFiles(REGISTER_MODEL_PATH, userModel);
           // write middleware file
           writeFiles(MIDDLEWARE_PATH, authMiddleware);
           // write user routes file
@@ -58,17 +58,17 @@ var generateFiles = (resBody, cb) => {
           cb(err);
         }
       } else {
-          //create api schema
-          var schema = api(apiSchema[i].schemaName ,schemaObject, apiSchema[i].schemaType);
-          //create api routes
-          var routes = apiRoutes(apiSchema[i].schemaName, apiSchema[i].schemaType);
-          //create api path
-          var API_PATH = `./modules/models/${apiSchema[i].schemaName.toLowerCase()}.js`;
-          //create api route path
-          var API_ROUTE_PATH = `./modules/routes/${apiSchema[i].schemaName.toLowerCase()}Routes.js`;
+                //create api model
+          const apiModel = api(apiSchema[i]),
+                //create api routes
+                routes = apiRoutes(apiSchema[i]),
+                //create api path
+                API_PATH = `./modules/models/${apiSchema[i].schemaName.toLowerCase()}.js`,
+                //create api route path
+                API_ROUTE_PATH = `./modules/routes/${apiSchema[i].schemaName.toLowerCase()}Routes.js`;
           try {
             //write api file
-            writeFiles(API_PATH, schema);
+            writeFiles(API_PATH, apiModel);
             //write api route file
             writeFiles(API_ROUTE_PATH, routes);
           } catch(err) {
@@ -76,10 +76,8 @@ var generateFiles = (resBody, cb) => {
           }
       }
     }
-
-    var serverListening = fs.readFileSync("./components/server/appListen.js", "utf8");
-    var server = createServer(serverListening);
-
+    //create server codes
+    const server = createServer(serverListening);
     try {
       //write package.json file
       writeFiles(PACKAGE_JSON_PATH, JSON.stringify(json, null, 2));
