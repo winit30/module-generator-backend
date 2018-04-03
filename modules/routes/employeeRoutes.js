@@ -23,7 +23,7 @@ Router.get('/employees', authenticate, (req, res) => {
 
 //api update by id request
 Router.put('/update/:_id', authenticate, (req, res) => {
-	Employee.findAndUpdate(req.params._id, req.body).then((employee)=>{
+	Employee.findAndUpdate(req.params._id, req.user._id ,req.body).then((employee)=>{
 		res.send(employee);
 	}).catch((err) => {
 		res.send(err);
@@ -32,7 +32,7 @@ Router.put('/update/:_id', authenticate, (req, res) => {
 
 //api delete by id request
 Router.delete('/delete/:_id', authenticate, (req, res) => {
-	Employee.findAndDelete(req.params._id).then((result)=>{
+	Employee.findAndDelete(req.params._id, req.user._id).then((result)=>{
 		res.send(result);
 	}).catch((err) => {
 		console.log(err);

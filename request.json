@@ -22,6 +22,8 @@
 			"schemaName": "User",
 			"schemaType": "register",
 			"modules": [],
+			"returnValue": ["_id" ,"name", "phone", "email"],
+			"functions":[],
 			"schema": {
 					"name": {
 						"type": "String",
@@ -30,12 +32,6 @@
 						"minlength":"3"
 					},
 					"phone": {
-						"type": "String",
-						"trim":"true",
-						"required": "true",
-						"minlength":"10"
-					},
-					"date": {
 						"type": "String",
 						"trim":"true",
 						"required": "true",
@@ -72,6 +68,54 @@
 			"schemaName": "Event",
 			"schemaType": "other",
 			"modules": [],
+			"returnValue": ["_id" ,"name", "phone", "date"],
+			"functions":[{
+							"type":"create",
+							"category":[
+								{
+									"create": "event",
+									"access": "private"
+								}
+							]
+						},
+						{
+							"type":"update",
+							"category": [
+								{
+									"update": "event",
+									"access": "private",
+									"params": "_id"
+								},
+								{
+									"update": "phone",
+									"access": "protected",
+									"params":"_id",
+									"requestBody":{
+										"phone":"req.body.phone"
+									}
+								}
+							]
+						},
+						{
+							"type":"delete",
+							"category": [
+								{
+									"delete": "event",
+									"access": "private",
+									"params": "_id",
+								}
+							]
+						},
+						{
+							"type":"read",
+							"category": [
+								{
+									"read": "event",
+									"access": "public",
+									"params":null
+								}
+							]
+						}],
 			"schema": {
 					"name": {
 						"type": "String",
@@ -89,7 +133,7 @@
 						"type": "String",
 						"trim":"true",
 						"required": "true",
-						"minlength":"10"
+						"minlength":"5"
 					}
 				}
 		}]
