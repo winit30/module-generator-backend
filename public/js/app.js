@@ -6,6 +6,7 @@ function uploadJson() {
   formData.append('requestJson', file[0]);
 
   var XHR = new XMLHttpRequest();
+  var origin = window.location.origin;
 
   XHR.onreadystatechange = function() {
     if (this.readyState == 4 && this.status == 200) {
@@ -17,7 +18,7 @@ function uploadJson() {
     }
   };
 
-  XHR.open('POST', 'http://localhost:4000/upload');
+  XHR.open('POST', origin+'upload');
   //XHR.setRequestHeader('Content-Type', 'multipart/form-data');
   XHR.send(formData);
 }
