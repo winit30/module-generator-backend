@@ -36,13 +36,9 @@ const upload = multer({
 
 // Check File Type
 function checkFileType(file, cb){
-  // Allowed ext
-  const filetypes = /json/;
-  // Check ext
-  const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
-  // Check mime
-  const mimetype = filetypes.test(file.mimetype);
-
+  const filetypes = /json/;   // Allowed ext
+  const extname = filetypes.test(path.extname(file.originalname).toLowerCase());   // Check ext
+  const mimetype = filetypes.test(file.mimetype);   // Check mime
   if(mimetype && extname){
     return cb(null,true);
   } else {
@@ -50,8 +46,9 @@ function checkFileType(file, cb){
   }
 }
 
+/**
 //module generate post request
-/*app.post("/generate", (req, res) => {
+app.post("/generate", (req, res) => {
     generateFiles(req.body, (rep) => {
       if(rep == "module generated") {
         res.download('./public/downloads/generatedModule.zip');
@@ -59,23 +56,25 @@ function checkFileType(file, cb){
         res.send(rep);
       }
     });
-});*/
+});
+*/
 
+//upload json and generate module
 app.post('/upload', (req, res) => {
   upload(req, res, (err) => {
-    if(err){
-      res.send(`Message: ${err}`);
+    if (err) {
+        res.send(`Message: ${err}`);
     } else {
-      if(req.file == undefined){
-        res.send('Error: No File Selected!');
-      } else {
-        var doc = fs.readFileSync(`./public/uploads/${req.file.filename}`, "utf8");
-        doc = JSON.parse(doc);
-        generateFiles(doc, (rep) => {
-            fse.removeSync(`./public/uploads/${req.file.filename}`);
-            res.send(rep);
-        });
-      }
+        if (req.file == undefined) {
+            res.send('Error: No File Selected!');
+        } else {
+            var doc = fs.readFileSync(`./public/uploads/${req.file.filename}`, "utf8");
+            doc = JSON.parse(doc);
+            generateFiles(doc, (rep) => {
+                fse.removeSync(`./public/uploads/${req.file.filename}`);
+                res.send(rep);
+            });
+        }
     }
   });
 });
