@@ -18,7 +18,7 @@ function uploadJson() {
     }
   };
 
-  XHR.open('POST', origin+'upload');
+  XHR.open('POST', origin+'/upload');
   //XHR.setRequestHeader('Content-Type', 'multipart/form-data');
   XHR.send(formData);
 }
