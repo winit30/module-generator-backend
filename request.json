@@ -22,7 +22,7 @@
 			"schemaName": "User",
 			"schemaType": "register",
 			"modules": [],
-			"returnValue": ["_id" ,"name", "phone", "email"],
+			"returnValue": "['_id' ,'name', 'phone', 'email']",
 			"functions":[],
 			"schema": {
 					"name": {
@@ -68,7 +68,7 @@
 			"schemaName": "Event",
 			"schemaType": "other",
 			"modules": [],
-			"returnValue": ["_id" ,"name", "phone", "date"],
+			"returnValue": "['_id' ,'name', 'phone', 'date']",
 			"functions":[{
 							"type":"create",
 							"categories":[

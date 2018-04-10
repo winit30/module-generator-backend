@@ -6,6 +6,10 @@ const express = require("express"),
       fs = require("fs"),
       fse = require('fs-extra'),
       multer = require('multer'),
+      _ = require('lodash'),
+      {mongoose} = require('./../db/db'),
+      {User} = require('./../model/user'),
+      {authenticate} = require('./../middleware/authenticate'),
       {generateFiles} = require('./../utils/generateFiles');
 
 app.use(bodyParser.json()); // get user request in json format
@@ -33,7 +37,6 @@ const upload = multer({
   }
 }).single('requestJson');
 
-
 // Check File Type
 function checkFileType(file, cb){
   const filetypes = /json/;   // Allowed ext
@@ -46,21 +49,51 @@ function checkFileType(file, cb){
   }
 }
 
-/**
-//module generate post request
-app.post("/generate", (req, res) => {
-    generateFiles(req.body, (rep) => {
-      if(rep == "module generated") {
-        res.download('./public/downloads/generatedModule.zip');
-      } else {
-        res.send(rep);
-      }
-    });
+//Signup request
+app.post('/create', (req, res) => {
+	var body = req.body;
+	var user = new User(body);
+	user.save().then(()=>{
+		return user.generateAuthToken();
+	}).then((token)=>{
+		res.header('x-auth', token).send(user);
+	}).catch((e)=>{
+		res.send(e);
+	});
 });
-*/
+
+//Get user request
+app.get('/user', authenticate , (req, res) => {
+  setTimeout(()=> {
+    	res.send(req.user);
+  }, 100)
+
+});
+
+//Login request
+app.post('/login', (req, res) => {
+	var body = _.pick(req.body, ['email', 'password']);
+	User.findByCredentials(body.email, body.password).then((user) => {
+		return user.generateAuthToken().then((token)=>{
+			res.header('x-auth', token).send(user);
+		});
+	}).catch((e) => {
+    console.log(e);
+		res.status(400).send(e);
+	});
+});
+
+//logout request
+app.delete('/logout', authenticate, (req, res)=>{
+	req.user.removeToken(req.token).then(()=>{
+		res.status(200).send("user loggedout");
+	}, ()=> {
+		res.status(400).send();
+	})
+});
 
 //upload json and generate module
-app.post('/upload', (req, res) => {
+app.post('/upload', authenticate, (req, res) => {
   upload(req, res, (err) => {
     if (err) {
         res.send(`Message: ${err}`);
@@ -84,3 +117,16 @@ const port = process.env.PORT || 4000; //set port dynamically
 app.listen(port, () => {
     console.log(`Server is listening on port ${port}`);
 });
+
+/**
+//module generate post request
+app.post("/generate", (req, res) => {
+    generateFiles(req.body, (rep) => {
+      if(rep == "module generated") {
+        res.download('./public/downloads/generatedModule.zip');
+      } else {
+        res.send(rep);
+      }
+    });
+});
+*/

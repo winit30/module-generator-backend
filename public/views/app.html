@@ -1,0 +1,35 @@
+<div class="grid-x grid-margin-x" id="app">
+  <div class="top-bar">
+    <div class="top-bar-right">
+      <ul class="dropdown menu" data-dropdown-menu>
+        <li class="menu-text" id="username"></li>
+        <li>
+          <a href="javascript:;" id="logout">Logout</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div class="cell small-12 marginTop60 text-center">
+        <h1>Module Generator</h1>
+
+        <div class="grid-x grid-margin-x marginTop60">
+          <div class="cell small-6 large-offset-3 file-upload-cont">
+              <div class="grid-x grid-margin-x" id="upload">
+                <div class="cell small-6 text-center input-topgap">
+                      <input type="file" id="file" accept=".json"/>
+                </div>
+                <div class="cell small-6 text-right">
+                      <button class="button" onclick="uploadJson()">Upload file</button>
+                </div>
+              </div>
+              <div class="grid-x grid-margin-x" id="download">
+                <div class="cell small-12 text-center input-topgap">
+                      <a href="/downloads/generatedModule.zip" target="_blank" class="button" onclick="uploadJson()">Download Module</a>
+                </div>
+              </div>
+          </div>
+        </div>
+  </div>
+</div>
+
+<p id="message" class="text-center"><p>
