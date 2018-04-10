@@ -1,0 +1,26 @@
+.marginTop45 {
+  margin-top: 45px;
+}
+
+.marginTop60 {
+  margin-top: 60px;
+}
+
+.input-topgap {
+  padding-top:10px;
+}
+
+.file-upload-cont {
+  padding: 60px 60px 40px 60px;
+  background: #f3f5f7;
+  border: 1px solid #e2e1e1;
+}
+
+#download {
+  display: none;
+}
+
+#message {
+  font-size: 18px;
+  margin-top:30px;
+}

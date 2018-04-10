@@ -71,7 +71,7 @@
 			"returnValue": ["_id" ,"name", "phone", "date"],
 			"functions":[{
 							"type":"create",
-							"category":[
+							"categories":[
 								{
 									"create": "event",
 									"access": "private"
@@ -80,16 +80,16 @@
 						},
 						{
 							"type":"update",
-							"category": [
+							"categories": [
 								{
 									"update": "event",
 									"access": "private",
-									"params": "_id"
+									"param": "_id"
 								},
 								{
 									"update": "phone",
 									"access": "protected",
-									"params":"_id",
+									"param":"_id",
 									"requestBody":{
 										"phone":"req.body.phone"
 									}
@@ -98,21 +98,21 @@
 						},
 						{
 							"type":"delete",
-							"category": [
+							"categories": [
 								{
 									"delete": "event",
 									"access": "private",
-									"params": "_id",
+									"param": "_id"
 								}
 							]
 						},
 						{
 							"type":"read",
-							"category": [
+							"categories": [
 								{
 									"read": "event",
 									"access": "public",
-									"params":null
+									"param":null
 								}
 							]
 						}],

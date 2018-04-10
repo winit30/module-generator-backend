@@ -1,6 +1,50 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,shrink-to-fit=no"><meta name="theme-color" content="#000000"><link rel="manifest" href="/manifest.json"><link rel="shortcut icon" href="/favicon.ico"><link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.12/semantic.min.css"><title>React App</title></head><body><noscript>You need to enable JavaScript to run this app.</noscript><div id="root"></div><!--[if lt IE 9]>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.2/html5shiv.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.2/html5shiv-printshiv.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/es5-shim/3.4.0/es5-shim.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/es5-shim/3.4.0/es5-sham.js"></script>
-    <![endif]--><script type="text/javascript" src="/static/js/main.a3a8c687.js"></script></body></html>
+<!DOCTYPE html>
+<html>
+<head>
+<title>Page Title</title>
+<link rel="stylesheet" href="css/foundation.min.css">
+<link rel="stylesheet" href="css/app.css">
+</head>
+<body>
+
+  <div class="grid-container">
+  <div class="grid-x grid-margin-x">
+    <div class="cell small-12 marginTop60 text-center">
+          <h1>Module Generator</h1>
+    </div>
+  </div>
+  <div class="grid-x grid-margin-x marginTop60">
+
+    <div class="cell small-6 large-offset-3 file-upload-cont">
+        <div class="grid-x grid-margin-x" id="upload">
+          <div class="cell small-6 text-center input-topgap">
+                <input type="file" id="file" accept=".json"/>
+          </div>
+          <div class="cell small-6 text-right">
+                <button class="button" onclick="uploadJson()">Upload file</button>
+          </div>
+        </div>
+        <div class="grid-x grid-margin-x" id="download">
+          <div class="cell small-12 text-center input-topgap">
+                <a href="/downloads/generatedModule.zip" target="_blank" class="button" onclick="uploadJson()">Download Module</a>
+          </div>
+        </div>
+    </div>
+  </div>
+            <p id="message" class="text-center"><p>
+</div>
+
+<script src="js/app.js"></script>
+</body>
+</html>
+
+<!--
+
+
+<div class="cell small-3 large-offset-3 text-center input-topgap">
+      <input type="file" accept=".json"/>
+</div>
+<div class="cell small-3 text-center">
+      <button class="button">Upload</button>
+</div>
+-->
