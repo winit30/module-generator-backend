@@ -5,7 +5,7 @@ var generateDir = (userID) => {
 
   //delete base folder
   fse.removeSync('./modules');
-  fs.mkdirSync(`./public/downloads/${userID}`);
+  fs.mkdirSync(`./public/${userID}`);
   console.log(userID, 1);
   //create folders
   fs.mkdirSync('./modules');
