@@ -31,7 +31,7 @@ const storage = multer.diskStorage({
 // Init Upload
 const upload = multer({
   storage: storage,
-  limits:{fileSize: 100000000},
+  limits:{fileSize: 1000000},
   fileFilter: function(req, file, cb){
     checkFileType(file, cb);
   }
@@ -64,10 +64,7 @@ app.post('/create', (req, res) => {
 
 //Get user request
 app.get('/user', authenticate , (req, res) => {
-  setTimeout(()=> {
     	res.send(req.user);
-  }, 100)
-
 });
 
 //Login request
@@ -103,7 +100,7 @@ app.post('/upload', authenticate, (req, res) => {
         } else {
             var doc = fs.readFileSync(`./public/uploads/${req.file.filename}`, "utf8");
             doc = JSON.parse(doc);
-            generateFiles(doc, (rep) => {
+            generateFiles(doc, req.user._id, (rep) => {
                 fse.removeSync(`./public/uploads/${req.file.filename}`);
                 res.send(rep);
             });

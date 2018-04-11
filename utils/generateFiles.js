@@ -18,79 +18,74 @@ const PACKAGE_JSON_PATH = "./modules/package.json",
       DB_PATH = "./modules/db/db.js",
       MIDDLEWARE_PATH = "./modules/middleware/authenticate.js";
 
-var generateFiles = (resBody, cb) => {
+var generateFiles = (resBody, userID, cb) => {
     //create module directory
-    generateDir();
-    //get package json
-    const json = resBody.package,
-          //create database file
-          db = dbs(resBody.dbName),
-          //get listening codes
-          serverListening = fs.readFileSync("./components/server/appListen.js", "utf8"),
-          //get api schema object
-          apiSchema = resBody.apiSchema;
-    //loop through apiSchema
-    for(let i = 0; i<apiSchema.length; i++) {
-      //add route modules
-      modules[`${apiSchema[i].schemaName.toLowerCase()}Routes`] = `require('./../routes/${apiSchema[i].schemaName.toLowerCase()}Routes')`;
-      //add app.use
-      createAppUse(`'/${apiSchema[i].schemaName.toLowerCase()}', ${apiSchema[i].schemaName.toLowerCase()}Routes`);
-      //if register schema
-      if (apiSchema[i].schemaType === "register") {
-        //create user model
-        const userModel = user(apiSchema[i]),
-              //create auth middleware
-              authMiddleware = authenticate(apiSchema[i].schemaName),
-              //create auth routes
-              routes = userRoutes(apiSchema[i]),
-              //user file path
-              REGISTER_MODEL_PATH = `./modules/models/${apiSchema[i].schemaName.toLowerCase()}.js`,
-              //userRoutes file path
-              REGISTER_ROUTE_PATH = `./modules/routes/${apiSchema[i].schemaName.toLowerCase()}Routes.js`;
-        try {
-          //write user file
-          writeFiles(REGISTER_MODEL_PATH, userModel);
-          // write middleware file
-          writeFiles(MIDDLEWARE_PATH, authMiddleware);
-          // write user routes file
-          writeFiles(REGISTER_ROUTE_PATH, routes);
-        } catch(err) {
-          cb(err);
-        }
-      } else {
-                //create api model
-          const apiModel = api(apiSchema[i]),
-                //create api routes
-                routes = apiRoutes(apiSchema[i]),
-                //create api path
-                API_PATH = `./modules/models/${apiSchema[i].schemaName.toLowerCase()}.js`,
-                //create api route path
-                API_ROUTE_PATH = `./modules/routes/${apiSchema[i].schemaName.toLowerCase()}Routes.js`;
-          try {
-            //write api file
-            writeFiles(API_PATH, apiModel);
-            //write api route file
-            writeFiles(API_ROUTE_PATH, routes);
-          } catch(err) {
-            cb(err);
-          }
-      }
-    }
-    //create server codes
-    const server = createServer(serverListening);
+    generateDir(userID);
     try {
-      //write package.json file
-      writeFiles(PACKAGE_JSON_PATH, JSON.stringify(json, null, 2));
-      //write db file
-      writeFiles(DB_PATH, db);
-      //write server file
-      writeFiles(SERVER_PATH, server);
-      //generate module zip file
-      generateModule();
-      //send response
-      cb('module generated');
-    } catch(err) {
-      cb(err);
+        //get package json
+        const json = resBody.package,
+              //create database file
+              db = dbs(resBody.dbName),
+              //get listening codes
+              serverListening = fs.readFileSync("./components/server/appListen.js", "utf8"),
+              //get api schema object
+              apiSchema = resBody.apiSchema;
+        //loop through apiSchema
+        for(let i = 0; i<apiSchema.length; i++) {
+          //add route modules
+          modules[`${apiSchema[i].schemaName.toLowerCase()}Routes`] = `require('./../routes/${apiSchema[i].schemaName.toLowerCase()}Routes')`;
+          //add app.use
+          createAppUse(`'/${apiSchema[i].schemaName.toLowerCase()}', ${apiSchema[i].schemaName.toLowerCase()}Routes`);
+          //if register schema
+          if (apiSchema[i].schemaType === "register") {
+            //create user model
+            const userModel = user(apiSchema[i]),
+                  //create auth middleware
+                  authMiddleware = authenticate(apiSchema[i].schemaName),
+                  //create auth routes
+                  routes = userRoutes(apiSchema[i]),
+                  //user file path
+                  REGISTER_MODEL_PATH = `./modules/models/${apiSchema[i].schemaName.toLowerCase()}.js`,
+                  //userRoutes file path
+                  REGISTER_ROUTE_PATH = `./modules/routes/${apiSchema[i].schemaName.toLowerCase()}Routes.js`;
+                  //write user file
+                  writeFiles(REGISTER_MODEL_PATH, userModel);
+                  // write middleware file
+                  writeFiles(MIDDLEWARE_PATH, authMiddleware);
+                  // write user routes file
+                  writeFiles(REGISTER_ROUTE_PATH, routes);
+
+          } else {
+                    //create api model
+              const apiModel = api(apiSchema[i]),
+                    //create api routes
+                    routes = apiRoutes(apiSchema[i]),
+                    //create api path
+                    API_PATH = `./modules/models/${apiSchema[i].schemaName.toLowerCase()}.js`,
+                    //create api route path
+                    API_ROUTE_PATH = `./modules/routes/${apiSchema[i].schemaName.toLowerCase()}Routes.js`;
+                    //write api file
+                    writeFiles(API_PATH, apiModel);
+                    //write api route file
+                    writeFiles(API_ROUTE_PATH, routes);
+          }
+        }
+
+        //create server codes
+        const server = createServer(serverListening);
+        //write package.json file
+        writeFiles(PACKAGE_JSON_PATH, JSON.stringify(json, null, 2));
+        //write db file
+        writeFiles(DB_PATH, db);
+        //write server file
+        writeFiles(SERVER_PATH, server);
+        //generate module zip file
+        generateModule(userID);
+        //send response
+        cb('module generated');
+
+  } catch(err) {
+      cb("Some went wrong. Please check your json format.");
     }
 }
 

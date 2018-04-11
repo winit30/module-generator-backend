@@ -1,7 +1,6 @@
 const {User} = require('./../model/user');
 
 var authenticate = (req, res, next) => {
-	  console.log("here");
 	var token = req.header('x-auth');
 
 	User.findByToken(token).then((user)=>{

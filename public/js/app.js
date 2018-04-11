@@ -2,6 +2,7 @@ var XHR = new XMLHttpRequest();
 var origin = window.location.origin;
 var isLoggedin = false;
 var nav = "login";
+var userData;
 
 function uploadJson() {
 
@@ -35,7 +36,7 @@ function postRequrest(url, body = {}, headers = {}) {
                   if (this.readyState == 4 && this.status == 200) {
                        if(XHR.responseText) {
                             var res = {
-                              data: XHR.responseText,
+                              data: JSON.parse(XHR.responseText),
                               xAuth: this.getResponseHeader("x-auth")
                             }
                            resolve(res);
@@ -58,7 +59,7 @@ function getRequrest(url, body = {}, headers = {}) {
                   if (this.readyState == 4 && this.status == 200) {
                        if(XHR.responseText) {
                             var res = {
-                              data: XHR.responseText
+                              data: JSON.parse(XHR.responseText)
                             }
                            resolve(res);
                        } else {
@@ -125,9 +126,6 @@ var Model = {
     }
     return postRequrest('/create', body);
   },
-  upload: function () {
-
-  },
   logout: function () {
     return deleteRequrest('/logout');
   }
@@ -138,6 +136,7 @@ var Controller = {
     Model.init().then(function (user) {
       if(user) {
         isLoggedin = true;
+        userData = user.data;
       }
       Views.init();
     }).catch(function (e) {
@@ -153,6 +152,7 @@ var Controller = {
         if(res){
           localStorage.xAuth = res.xAuth;
           isLoggedin = true;
+          userData = res.data;
           Views.init();
         }
       }).catch(function (err) {
@@ -166,6 +166,7 @@ var Controller = {
       if(res){
         localStorage.xAuth = res.xAuth;
         isLoggedin = true;
+        userData = res.data;
         Views.init();
       }
     }).catch(function (err) {
@@ -258,7 +259,7 @@ var Views = {
       render: function () {
         if(localStorage.xAuth && isLoggedin){
            setViews('./views/app.html', function() {
-             document.getElementById('username').innerHTML = "Hi Vineet";
+             document.getElementById('username').innerHTML = "Hi "+ userData.name;
              document.getElementById('logout').addEventListener('click', function () {
                  Controller.logoutCtrl();
              });

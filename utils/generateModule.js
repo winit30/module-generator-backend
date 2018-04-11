@@ -1,8 +1,8 @@
 const fs = require("fs"),
       archiver = require('archiver');
 
-var generateModule = () => {
-    var output = fs.createWriteStream('./public/downloads/generatedModule.zip');
+var generateModule = (userID) => {
+    var output = fs.createWriteStream(`./public/downloads/${userID}/generatedModule.zip`);
     var archive = archiver('zip', {
       zlib: { level: 9 } // Sets the compression level.
     });
