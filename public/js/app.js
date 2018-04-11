@@ -165,7 +165,6 @@ var Controller = {
       }).catch(function (err) {
         isLoggedin = false;
         localStorage.clear();
-        console.log(err);
       });;
   },
   signupCtrl: function (n, e, p) {
