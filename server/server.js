@@ -67,6 +67,17 @@ app.get('/user', authenticate , (req, res) => {
     	res.send(req.user);
 });
 
+//Get user request
+app.get('/getAllUsers' , authenticate, (req, res) => {
+    if(req.user.email === "vineetm616@gmail.com") {
+      User.find({}).then((users) => {
+          res.send(users)
+      })
+    } else {
+      res.status(401).send();
+    }
+});
+
 //Login request
 app.post('/login', (req, res) => {
 	var body = _.pick(req.body, ['email', 'password']);

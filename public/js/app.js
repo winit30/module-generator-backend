@@ -27,25 +27,28 @@ function uploadJson() {
 function postRequrest(url, body = {}, headers = {}) {
       var mainUrl = origin+url;
 
-      XHR.open('POST', mainUrl);
-      XHR.setRequestHeader("Content-Type", "application/json");
-      XHR.send(JSON.stringify(body));
+        XHR.open('POST', mainUrl);
+        XHR.setRequestHeader("Content-Type", "application/json");
+        XHR.send(JSON.stringify(body));
 
-      return new Promise(function (resolve, reject) {
-          XHR.onreadystatechange = function() {
-                  if (this.readyState == 4 && this.status == 200) {
-                       if(XHR.responseText) {
-                            var res = {
-                              data: JSON.parse(XHR.responseText),
-                              xAuth: this.getResponseHeader("x-auth")
-                            }
-                           resolve(res);
-                       } else {
-                         reject();
-                       }
-                  }
-          };
-      });
+        return new Promise(function (resolve, reject) {
+            XHR.onreadystatechange = function() {
+                    if (this.readyState == 4 && this.status == 200) {
+                         if(XHR.responseText) {
+                              var res = {
+                                data: JSON.parse(XHR.responseText),
+                                xAuth: this.getResponseHeader("x-auth")
+                              }
+                             resolve(res);
+                         } else {
+                           reject();
+                         }
+                    } else if(this.readyState == 4 && this.status != 200){
+                      reject("Wrong credentials");
+                    }
+            };
+        });
+
 }
 
 function getRequrest(url, body = {}, headers = {}) {
@@ -65,6 +68,8 @@ function getRequrest(url, body = {}, headers = {}) {
                        } else {
                          reject();
                        }
+                  } else if(this.readyState == 4 && this.status != 200){
+                    reject("header not found");
                   }
           };
       });
@@ -87,6 +92,8 @@ function deleteRequrest(url, body = {}, headers = {}) {
                        } else {
                          reject();
                        }
+                  } else if(this.readyState == 4 && this.status != 200){
+                    reject("header not found");
                   }
           };
       });
@@ -116,6 +123,7 @@ var Model = {
         email: email,
         password: password
       }
+
       return postRequrest('/login', body);
   },
   register: function (name, email, password) {
@@ -140,7 +148,6 @@ var Controller = {
       }
       Views.init();
     }).catch(function (e) {
-      console.log(e);
       isLoggedin = false;
       localStorage.clear();
       Views.init();
@@ -260,6 +267,7 @@ var Views = {
         if(localStorage.xAuth && isLoggedin){
            setViews('./views/app.html', function() {
              document.getElementById('username').innerHTML = "Hi "+ userData.name;
+             document.getElementById('downloadButton').setAttribute("href", "/downloads/"+userData._id+"/generatedModule.zip");
              document.getElementById('logout').addEventListener('click', function () {
                  Controller.logoutCtrl();
              });
