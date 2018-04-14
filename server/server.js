@@ -12,9 +12,9 @@ const express = require("express"),
       {authenticate} = require('./../middleware/authenticate'),
       {generateFiles} = require('./../utils/generateFiles');
 
-app.use(bodyParser.json()); // get user request in json format
-app.use(express.static(path.join(__dirname, '../public')));  // set route for index
-app.use(cors({origin: '*'})); // set cross origin headers
+app.use(bodyParser.json());
+app.use(express.static(path.join(__dirname, '../public')));
+app.use(cors({origin: '*'}));
 
 app.get("/", (req, res) => {
     res.send("This is a homepage");
@@ -125,16 +125,3 @@ const port = process.env.PORT || 4000; //set port dynamically
 app.listen(port, () => {
     console.log(`Server is listening on port ${port}`);
 });
-
-/**
-//module generate post request
-app.post("/generate", (req, res) => {
-    generateFiles(req.body, (rep) => {
-      if(rep == "module generated") {
-        res.download('./public/downloads/generatedModule.zip');
-      } else {
-        res.send(rep);
-      }
-    });
-});
-*/
