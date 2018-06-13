@@ -15,12 +15,6 @@ var EventSchema = new mongoose.Schema({
     required: true,
     minlength: 10
   },
-  date: {
-    type: String,
-    trim: true,
-    required: true,
-    minlength: 5
-  },
   userID: {
     type: String,
     trim: true,
@@ -32,7 +26,7 @@ var EventSchema = new mongoose.Schema({
 EventSchema.methods.toJSON = function() {
 	var event = this;
 	var eventObject = event.toObject();
-	return _.pick(eventObject, ['_id' ,'name', 'phone', 'date']);
+	return _.pick(eventObject, ['_id' ,'name', 'phone']);
 };
 
 //Find by userID
@@ -45,12 +39,6 @@ EventSchema.statics.findEventsByUserId = function(userID) {
 EventSchema.statics.updateEvent = function(_id, userID, body) {
   const Event = this;
   return Event.update({_id, userID}, {$set:body}, {new: true});
-}
-
-//Find by id and update (protected)
-EventSchema.statics.updatePhone = function(_id, body) {
-  const Event = this;
-  return Event.update({_id}, {$set:body}, {new: true});
 }
 
 

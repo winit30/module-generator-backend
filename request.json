@@ -22,7 +22,7 @@
 			"schemaName": "User",
 			"schemaType": "register",
 			"modules": [],
-			"returnValue": "['_id' ,'name', 'phone', 'email']",
+			"returnValue": "['_id' ,'name', 'email']",
 			"functions":[],
 			"schema": {
 					"name": {
@@ -31,15 +31,10 @@
 						"required": "true",
 						"minlength":"3"
 					},
-					"phone": {
-						"type": "String",
-						"trim":"true",
-						"required": "true",
-						"minlength":"10"
-					},
 					"email": {
 						"type": "String",
 						"unique": "true",
+						"index":"true",
 						"required": "true",
 						"minlength": "6",
 						"trim": "true",
@@ -68,7 +63,7 @@
 			"schemaName": "Event",
 			"schemaType": "other",
 			"modules": [],
-			"returnValue": "['_id' ,'name', 'phone', 'date']",
+			"returnValue": "['_id' ,'name', 'phone']",
 			"functions":[{
 							"type":"create",
 							"categories":[
@@ -85,14 +80,6 @@
 									"update": "event",
 									"access": "private",
 									"param": "_id"
-								},
-								{
-									"update": "phone",
-									"access": "protected",
-									"param":"_id",
-									"requestBody":{
-										"phone":"req.body.phone"
-									}
 								}
 							]
 						},
@@ -128,12 +115,6 @@
 						"trim":"true",
 						"required": "true",
 						"minlength":"10"
-					},
-					"date": {
-						"type": "String",
-						"trim":"true",
-						"required": "true",
-						"minlength":"5"
 					}
 				}
 		}]

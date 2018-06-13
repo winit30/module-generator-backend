@@ -30,16 +30,6 @@ Router.put('/updateEvent/:_id', authenticate, (req, res) => {
 	});
 });
 
-//api update by id request
-Router.put('/updatePhone/:_id', authenticate, (req, res) => {
-	const body = {phone:req.body.phone};
-	Event.updatePhone(req.params._id, body).then((event)=>{
-		res.send(event);
-	}).catch((err) => {
-		res.send(err);
-	});
-});
-
 
 
 //api delete by id request

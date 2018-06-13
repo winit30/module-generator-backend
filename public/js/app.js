@@ -5,7 +5,6 @@ var nav = "login";
 var userData;
 
 function uploadJson() {
-
   var formData = new FormData();
   var file = document.getElementById('file').files;
   formData.append('requestJson', file[0]);
@@ -163,6 +162,8 @@ var Controller = {
           Views.init();
         }
       }).catch(function (err) {
+        alert(err);
+        loader.hide();
         isLoggedin = false;
         localStorage.clear();
       });;
@@ -176,6 +177,8 @@ var Controller = {
         Views.init();
       }
     }).catch(function (err) {
+      alert(err);
+      loader.hide();
       isLoggedin = false;
       localStorage.clear();
       console.log(err);
@@ -189,8 +192,9 @@ var Controller = {
         nav = "login"
         Views.init();
       }
-    }).catch(function (e) {
-      console.log(e);
+    }).catch(function (err) {
+      loader.hide();
+      alert(err);
     });;
   },
   navCtrl: function (navTo) {
@@ -199,11 +203,14 @@ var Controller = {
   }
 }
 
+var loader = new Loader();
+
 var Views = {
     init: function () {
       this.loginView.init();
       this.signupView.init();
       this.appView.init();
+      loader.init();
     },
     loginView: {
         init: function () {
@@ -218,14 +225,23 @@ var Views = {
 
                this.login = document.getElementById('login-form');
                this.openSignup = document.getElementById('openSignup');
+               var showPassword = document.getElementById('show-password');
 
                this.openSignup.addEventListener('click', function () {
-                 console.log('boom');
                   Controller.navCtrl('signup');
+               });
+
+               showPassword.addEventListener('click', function () {
+                  if(showPassword.checked != true) {
+                      password.type = "password";
+                  } else {
+                      password.type = "text";
+                  }
                });
 
                this.login.addEventListener('submit', function (event) {
                    event.preventDefault();
+                   loader.show();
                    Controller.loginCtrl(email.value, password.value);
                });
              });
@@ -252,6 +268,7 @@ var Views = {
             this.signup = document.getElementById('signup-form');
             this.signup.addEventListener('submit', function (event) {
                 event.preventDefault();
+                loader.show();
                 Controller.signupCtrl(name.value, email.value, password.value);
             });
           });
@@ -268,6 +285,7 @@ var Views = {
              document.getElementById('username').innerHTML = "Hi "+ userData.name;
              document.getElementById('downloadButton').setAttribute("href", "/downloads/"+userData._id+"/generatedModule.zip");
              document.getElementById('logout').addEventListener('click', function () {
+                 loader.show();
                  Controller.logoutCtrl();
              });
            })
@@ -275,6 +293,33 @@ var Views = {
 
       }
     }
+}
+
+function Loader() {
+    this.render = function() {
+        var popover = document.createElement("div");
+        var classAttr = document.createAttribute("class");
+        var idAttr = document.createAttribute("id");
+        idAttr.value = "popover";
+        classAttr.value = "popover";
+        popover.setAttributeNode(classAttr);
+        popover.setAttributeNode(idAttr);
+        document.body.appendChild(popover);
+        document.getElementById("popover").innerHTML = '<div class="lds-dual-ring"></div>';
+    };
+    this.render();
+}
+
+Loader.prototype.init = function() {
+    this.hide();
+}
+
+Loader.prototype.show = function() {
+      document.getElementById("popover").style.display = "block";
+}
+
+Loader.prototype.hide = function() {
+      document.getElementById("popover").style.display = "none";
 }
 
 Controller.init();
