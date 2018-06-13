@@ -1,8 +1,9 @@
-var XHR = new XMLHttpRequest();
-var origin = window.location.origin;
-var isLoggedin = false;
-var nav = "login";
-var userData;
+var XHR = new XMLHttpRequest(),
+origin = window.location.origin,
+loader = new Loader(),
+isLoggedin = false,
+nav = "login",
+userData;
 
 function uploadJson() {
   var formData = new FormData();
@@ -181,7 +182,6 @@ var Controller = {
       loader.hide();
       isLoggedin = false;
       localStorage.clear();
-      console.log(err);
     });;
   },
   logoutCtrl: function () {
@@ -202,8 +202,6 @@ var Controller = {
       Views.init();
   }
 }
-
-var loader = new Loader();
 
 var Views = {
     init: function () {
