@@ -2,6 +2,14 @@ body {
   background: #f9f9f9;
 }
 
+#app h1 {
+  color:#ab18ba;
+}
+
+#app h1 sup {
+   font-size: 70% !important;
+}
+
 .marginTop30 {
   margin-top: 30px;
 }
@@ -74,6 +82,11 @@ body {
     left: 0;
 }
 
+.sub-para {
+  font-size: 14px;
+  margin-top: -15px;
+}
+
 .lds-dual-ring {
   display: inline-block;
   width: 49px;
@@ -85,6 +98,7 @@ body {
   right: 0;
   bottom: 0;
 }
+
 .lds-dual-ring:after {
   content: " ";
   display: block;
