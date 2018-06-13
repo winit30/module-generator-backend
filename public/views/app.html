@@ -11,9 +11,9 @@
   </div>
   <div class="cell small-12 marginTop60 text-center">
         <h1>Module Generator</h1>
-
+        <p>Configure your JSON file and upload here. I will give you the basic backend codes.</p>
         <div class="grid-x grid-margin-x marginTop60">
-          <div class="cell small-6 large-offset-3 file-upload-cont">
+          <div class="cell small-5 file-upload-cont">
               <div class="grid-x grid-margin-x" id="upload">
                 <div class="cell small-6 text-center input-topgap">
                       <input type="file" id="file" accept=".json"/>
@@ -22,14 +22,140 @@
                       <button class="button" onclick="uploadJson()">Upload file</button>
                 </div>
               </div>
+              <p id="message" class="text-center"><p>
               <div class="grid-x grid-margin-x" id="download">
                 <div class="cell small-12 text-center input-topgap">
                       <a href="" target="_blank" class="button" id="downloadButton">Download Module</a>
                 </div>
               </div>
           </div>
+          <div class="cell small-7 json-file">
+          <a href="views/request.json" class="button" id="downloadSample" download>Download Sample JSON</a>
+            <!-- HTML generated --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%">{  <span style="color: #007700">&quot;package&quot;</span> : {
+  <span style="color: #007700">&quot;name&quot;</span>: <span style="background-color: #fff0f0">&quot;newApplication&quot;</span>,
+  <span style="color: #007700">&quot;version&quot;</span>: <span style="background-color: #fff0f0">&quot;1.0.0&quot;</span>,
+  <span style="color: #007700">&quot;description&quot;</span>: <span style="background-color: #fff0f0">&quot;This is a new application&quot;</span>,
+  <span style="color: #007700">&quot;main&quot;</span>: <span style="background-color: #fff0f0">&quot;server/server.js&quot;</span>,
+  <span style="color: #007700">&quot;scripts&quot;</span>: {
+    <span style="color: #007700">&quot;start&quot;</span>: <span style="background-color: #fff0f0">&quot;node server/server.js&quot;</span>
+  },
+  <span style="color: #007700">&quot;author&quot;</span>: <span style="background-color: #fff0f0">&quot;ModuleBuilder&quot;</span>,
+  <span style="color: #007700">&quot;license&quot;</span>: <span style="background-color: #fff0f0">&quot;ISC&quot;</span>,
+  <span style="color: #007700">&quot;dependencies&quot;</span>: {
+    <span style="color: #007700">&quot;bcryptjs&quot;</span>: <span style="background-color: #fff0f0">&quot;^2.4.3&quot;</span>,
+    <span style="color: #007700">&quot;body-parser&quot;</span>: <span style="background-color: #fff0f0">&quot;^1.18.2&quot;</span>,
+    <span style="color: #007700">&quot;express&quot;</span>: <span style="background-color: #fff0f0">&quot;^4.16.2&quot;</span>,
+    <span style="color: #007700">&quot;jsonwebtoken&quot;</span>: <span style="background-color: #fff0f0">&quot;^8.1.0&quot;</span>,
+    <span style="color: #007700">&quot;mongoose&quot;</span>: <span style="background-color: #fff0f0">&quot;^4.12.4&quot;</span>,
+    <span style="color: #007700">&quot;validator&quot;</span>: <span style="background-color: #fff0f0">&quot;^9.0.0&quot;</span>
+  }
+},
+<span style="color: #007700">&quot;dbName&quot;</span>: <span style="background-color: #fff0f0">&quot;MyApp&quot;</span>,
+<span style="color: #007700">&quot;apiSchema&quot;</span>: [{
+    <span style="color: #007700">&quot;schemaName&quot;</span>: <span style="background-color: #fff0f0">&quot;User&quot;</span>,
+    <span style="color: #007700">&quot;schemaType&quot;</span>: <span style="background-color: #fff0f0">&quot;register&quot;</span>,
+    <span style="color: #007700">&quot;modules&quot;</span>: [],
+    <span style="color: #007700">&quot;returnValue&quot;</span>: <span style="background-color: #fff0f0">&quot;[&#39;_id&#39; ,&#39;name&#39;, &#39;email&#39;]&quot;</span>,
+    <span style="color: #007700">&quot;functions&quot;</span>:[],
+    <span style="color: #007700">&quot;schema&quot;</span>: {
+        <span style="color: #007700">&quot;name&quot;</span>: {
+          <span style="color: #007700">&quot;type&quot;</span>: <span style="background-color: #fff0f0">&quot;String&quot;</span>,
+          <span style="color: #007700">&quot;trim&quot;</span>:<span style="background-color: #fff0f0">&quot;true&quot;</span>,
+          <span style="color: #007700">&quot;required&quot;</span>: <span style="background-color: #fff0f0">&quot;true&quot;</span>,
+          <span style="color: #007700">&quot;minlength&quot;</span>:<span style="background-color: #fff0f0">&quot;3&quot;</span>
+        },
+        <span style="color: #007700">&quot;email&quot;</span>: {
+          <span style="color: #007700">&quot;type&quot;</span>: <span style="background-color: #fff0f0">&quot;String&quot;</span>,
+          <span style="color: #007700">&quot;unique&quot;</span>: <span style="background-color: #fff0f0">&quot;true&quot;</span>,
+          <span style="color: #007700">&quot;index&quot;</span>:<span style="background-color: #fff0f0">&quot;true&quot;</span>,
+          <span style="color: #007700">&quot;required&quot;</span>: <span style="background-color: #fff0f0">&quot;true&quot;</span>,
+          <span style="color: #007700">&quot;minlength&quot;</span>: <span style="background-color: #fff0f0">&quot;6&quot;</span>,
+          <span style="color: #007700">&quot;trim&quot;</span>: <span style="background-color: #fff0f0">&quot;true&quot;</span>,
+          <span style="color: #007700">&quot;validate&quot;</span>: {
+            <span style="color: #007700">&quot;validator&quot;</span>: <span style="background-color: #fff0f0">&quot;validator.isEmail&quot;</span>,
+            <span style="color: #007700">&quot;message&quot;</span>: <span style="background-color: #fff0f0">&quot;&#39;{VALUE} is not a valid email&#39;&quot;</span>
+          }
+        },
+        <span style="color: #007700">&quot;password&quot;</span>: {
+          <span style="color: #007700">&quot;type&quot;</span>: <span style="background-color: #fff0f0">&quot;String&quot;</span>,
+          <span style="color: #007700">&quot;required&quot;</span>: <span style="background-color: #fff0f0">&quot;true&quot;</span>,
+          <span style="color: #007700">&quot;minlength&quot;</span>:<span style="background-color: #fff0f0">&quot;6&quot;</span>
+        },
+        <span style="color: #007700">&quot;tokens&quot;</span>:[{
+          <span style="color: #007700">&quot;access&quot;</span>: {
+            <span style="color: #007700">&quot;type&quot;</span>:<span style="background-color: #fff0f0">&quot;String&quot;</span>,
+            <span style="color: #007700">&quot;required&quot;</span>: <span style="background-color: #fff0f0">&quot;true&quot;</span>
+          },
+          <span style="color: #007700">&quot;token&quot;</span>: {
+            <span style="color: #007700">&quot;type&quot;</span>:<span style="background-color: #fff0f0">&quot;String&quot;</span>,
+            <span style="color: #007700">&quot;required&quot;</span>: <span style="background-color: #fff0f0">&quot;true&quot;</span>
+          }
+        }]
+      }
+  },{
+    <span style="color: #007700">&quot;schemaName&quot;</span>: <span style="background-color: #fff0f0">&quot;Event&quot;</span>,
+    <span style="color: #007700">&quot;schemaType&quot;</span>: <span style="background-color: #fff0f0">&quot;other&quot;</span>,
+    <span style="color: #007700">&quot;modules&quot;</span>: [],
+    <span style="color: #007700">&quot;returnValue&quot;</span>: <span style="background-color: #fff0f0">&quot;[&#39;_id&#39; ,&#39;name&#39;, &#39;phone&#39;]&quot;</span>,
+    <span style="color: #007700">&quot;functions&quot;</span>:[{
+            <span style="color: #007700">&quot;type&quot;</span>:<span style="background-color: #fff0f0">&quot;create&quot;</span>,
+            <span style="color: #007700">&quot;categories&quot;</span>:[
+              {
+                <span style="color: #007700">&quot;create&quot;</span>: <span style="background-color: #fff0f0">&quot;event&quot;</span>,
+                <span style="color: #007700">&quot;access&quot;</span>: <span style="background-color: #fff0f0">&quot;private&quot;</span>
+              }
+            ]
+          },
+          {
+            <span style="color: #007700">&quot;type&quot;</span>:<span style="background-color: #fff0f0">&quot;update&quot;</span>,
+            <span style="color: #007700">&quot;categories&quot;</span>: [
+              {
+                <span style="color: #007700">&quot;update&quot;</span>: <span style="background-color: #fff0f0">&quot;event&quot;</span>,
+                <span style="color: #007700">&quot;access&quot;</span>: <span style="background-color: #fff0f0">&quot;private&quot;</span>,
+                <span style="color: #007700">&quot;param&quot;</span>: <span style="background-color: #fff0f0">&quot;_id&quot;</span>
+              }
+            ]
+          },
+          {
+            <span style="color: #007700">&quot;type&quot;</span>:<span style="background-color: #fff0f0">&quot;delete&quot;</span>,
+            <span style="color: #007700">&quot;categories&quot;</span>: [
+              {
+                <span style="color: #007700">&quot;delete&quot;</span>: <span style="background-color: #fff0f0">&quot;event&quot;</span>,
+                <span style="color: #007700">&quot;access&quot;</span>: <span style="background-color: #fff0f0">&quot;private&quot;</span>,
+                <span style="color: #007700">&quot;param&quot;</span>: <span style="background-color: #fff0f0">&quot;_id&quot;</span>
+              }
+            ]
+          },
+          {
+            <span style="color: #007700">&quot;type&quot;</span>:<span style="background-color: #fff0f0">&quot;read&quot;</span>,
+            <span style="color: #007700">&quot;categories&quot;</span>: [
+              {
+                <span style="color: #007700">&quot;read&quot;</span>: <span style="background-color: #fff0f0">&quot;event&quot;</span>,
+                <span style="color: #007700">&quot;access&quot;</span>: <span style="background-color: #fff0f0">&quot;public&quot;</span>,
+                <span style="color: #007700">&quot;param&quot;</span>:<span style="color: #008800; font-weight: bold">null</span>
+              }
+            ]
+          }],
+    <span style="color: #007700">&quot;schema&quot;</span>: {
+        <span style="color: #007700">&quot;name&quot;</span>: {
+          <span style="color: #007700">&quot;type&quot;</span>: <span style="background-color: #fff0f0">&quot;String&quot;</span>,
+          <span style="color: #007700">&quot;trim&quot;</span>:<span style="background-color: #fff0f0">&quot;true&quot;</span>,
+          <span style="color: #007700">&quot;required&quot;</span>: <span style="background-color: #fff0f0">&quot;true&quot;</span>,
+          <span style="color: #007700">&quot;minlength&quot;</span>:<span style="background-color: #fff0f0">&quot;3&quot;</span>
+        },
+        <span style="color: #007700">&quot;phone&quot;</span>: {
+          <span style="color: #007700">&quot;type&quot;</span>: <span style="background-color: #fff0f0">&quot;String&quot;</span>,
+          <span style="color: #007700">&quot;trim&quot;</span>:<span style="background-color: #fff0f0">&quot;true&quot;</span>,
+          <span style="color: #007700">&quot;required&quot;</span>: <span style="background-color: #fff0f0">&quot;true&quot;</span>,
+          <span style="color: #007700">&quot;minlength&quot;</span>:<span style="background-color: #fff0f0">&quot;10&quot;</span>
+        }
+      }
+  }]
+}
+</pre></div>
+<!-- HTML generated close-->
+
+          </div>
         </div>
   </div>
 </div>
-
-<p id="message" class="text-center"><p>

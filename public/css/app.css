@@ -23,9 +23,16 @@ body {
 }
 
 .file-upload-cont {
-  padding: 60px 60px 40px 60px;
+  padding: 30px;
   background: #ffffff;
   border: 1px solid #e2e1e1;
+}
+
+.json-file {
+    padding: 30px;
+    background: #ffffff;
+    border: 1px solid #e2e1e1;
+    text-align: left;
 }
 
 #download {
