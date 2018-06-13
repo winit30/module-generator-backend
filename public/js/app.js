@@ -24,30 +24,30 @@ function uploadJson() {
 }
 
 function postRequrest(url, body = {}, headers = {}) {
-      var mainUrl = origin+url;
+    var mainUrl = origin+url;
 
-        XHR.open('POST', mainUrl);
-        XHR.setRequestHeader("Content-Type", "application/json");
-        XHR.send(JSON.stringify(body));
+    XHR.open('POST', mainUrl);
+    XHR.setRequestHeader("Content-Type", "application/json");
+    XHR.send(JSON.stringify(body));
 
-        return new Promise(function (resolve, reject) {
-            XHR.onreadystatechange = function() {
-                    if (this.readyState == 4 && this.status == 200) {
-                         if(XHR.responseText) {
-                              var res = {
-                                data: JSON.parse(XHR.responseText),
-                                xAuth: this.getResponseHeader("x-auth")
-                              }
-                             resolve(res);
-                         } else {
-                           reject();
-                         }
-                    } else if(this.readyState == 4 && this.status != 200){
-                      reject("Wrong credentials");
-                    }
-            };
-        });
-
+    return new Promise(function (resolve, reject) {
+        XHR.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                  var res = JSON.parse(XHR.responseText);
+                 if(res && !res.hasOwnProperty("errors") && !res.hasOwnProperty("errmsg")) {
+                      var res = {
+                        data: JSON.parse(XHR.responseText),
+                        xAuth: this.getResponseHeader("x-auth")
+                      }
+                     resolve(res);
+                 } else {
+                   reject(res._message || res.errmsg);
+                 }
+            } else if(this.readyState == 4 && this.status != 200){
+              reject("Wrong credentials");
+            }
+        };
+    });
 }
 
 function getRequrest(url, body = {}, headers = {}) {
